@@ -1,1 +1,1 @@
-# ISIS2603_202510_5_parcial1
+# ISIS2603_202510_5_parcial1 Sofia Arias Zuluaga 202310260
