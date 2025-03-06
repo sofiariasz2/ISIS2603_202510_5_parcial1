@@ -9,6 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
 import lombok.Data;
 import uk.co.jemos.podam.common.PodamExclude;
 
@@ -32,11 +34,28 @@ public class StudentEntity {
     private String name;
 
     /**
-     * A list of the records of courses that the student has taken so far.
-     * Each record indicates the semester, the course, and the final grade of the
-     * student in the course.
+     * Student's code
      */
-    // TODO
+    private String code;
+
+    /**
+     * Courses the student has taken
+     */
+    @PodamExclude
+    @ManyToMany
+    @JoinTable(
+        name = "student_course",
+        joinColumns = @JoinColumn(name = "student_id"),
+        inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    private List<CourseEntity> courses = new ArrayList<>();
+
+    /**
+     * Records of the student
+     */
+    @PodamExclude
+    @OneToMany(mappedBy = "student")
+    private List<RecordEntity> records = new ArrayList<>();
 
     /**
      * A list of all the courses that the student has ever taken. No course should

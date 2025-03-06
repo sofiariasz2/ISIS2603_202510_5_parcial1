@@ -2,6 +2,8 @@ package uniandes.dse.examen1.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,12 +38,45 @@ public class CourseServiceTest {
     }
 
     @Test
-    void testCreateRecordMissingCourse() {
-        // TODO
+    void testCreateCourse() {
+        //creo un curso
+        CourseEntity course = factory.manufacturePojo(CourseEntity.class);
+        course.setCourseCode("CURSO_" + System.currentTimeMillis()); 
+        course.setCredits(5); 
+        
+        try {
+            
+            CourseEntity savedCourse = courseService.createCourse(course);
+            
+           
+            assertNotNull(savedCourse);
+            assertEquals(course.getCourseCode(), savedCourse.getCourseCode());
+            assertEquals(5, savedCourse.getCredits());
+        } catch (RepeatedCourseException e) {
+            fail("No debería fallar al crear un curso válido: " + e.getMessage());
+        }
     }
 
+    
     @Test
     void testCreateRepeatedCourse() {
-        // TODO
+        try {
+            //creo un curso
+            CourseEntity course1 = factory.manufacturePojo(CourseEntity.class);
+            course1.setCredits(5); // Créditos válidos
+            courseService.createCourse(course1);
+            
+            //creo otro curso con el mismo codigo
+            CourseEntity course2 = factory.manufacturePojo(CourseEntity.class);
+            course2.setCourseCode(course1.getCourseCode());
+            course2.setCredits(3);
+            
+            // Intentar crear el curso repetido
+            courseService.createCourse(course2);
+            fail("Debeeria fallar porque el codigoya existe");
+        } catch (RepeatedCourseException e) {
+            // Verificar que sea la excepción correcta
+            assertTrue(e.getMessage().contains("ya existe un curso con el codigo"));
+        }
     }
 }

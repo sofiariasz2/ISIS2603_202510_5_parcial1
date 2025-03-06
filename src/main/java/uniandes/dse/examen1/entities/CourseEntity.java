@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 import uk.co.jemos.podam.common.PodamExclude;
 
@@ -39,5 +40,14 @@ public class CourseEntity {
      * A list with the students that have been enrolled in this course.
      * No student should appear more than once in this list
      */
-    // TODO
+    @PodamExclude
+    @ManyToMany(mappedBy = "courses")
+    private List<StudentEntity> students = new ArrayList<>();
+    
+    /**
+     * Records associated with this course
+     */
+    @PodamExclude
+    @OneToMany(mappedBy = "course")
+    private List<RecordEntity> records = new ArrayList<>();
 }

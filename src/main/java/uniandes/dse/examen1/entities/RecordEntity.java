@@ -27,6 +27,23 @@ public class RecordEntity {
      */
     private String semester;
 
-    // TODO
+    /**
+     * Grade obtained by the student
+     */
+    private Double grade;
+
+    /**
+     * Student associated with this record
+     */
+    @PodamExclude
+    @ManyToOne
+    private StudentEntity student;
+
+    /**
+     * Course associated with this record
+     */
+    @PodamExclude
+    @ManyToOne
+    private CourseEntity course;
 
 }
